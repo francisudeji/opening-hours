@@ -7,7 +7,7 @@ module.exports = {
         100: "#f8f8f8",
         200: "#eeeeee",
         300: "#a1a2a4",
-        400: "#202125" /** hello */,
+        400: "#202125",
       },
       green: {
         DEFAULT: "#5bcb02",
