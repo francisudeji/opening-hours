@@ -1,12 +1,22 @@
 import Head from "next/head";
 import { Roboto } from "next/font/google";
+import { Schedule } from "src/components/Schedule";
+import { InferGetServerSidePropsType } from "next";
+import { FormattedResponseData } from "src/utils";
+import Error from "src/pages/_error";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
   subsets: ["latin"],
 });
 
-export default function Home() {
+export default function Home(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) {
+  if (props.statusCode !== 200) {
+    return <Error statusCode={props.statusCode} message={props.message} />;
+  }
+
   return (
     <>
       <Head>
@@ -17,9 +27,9 @@ export default function Home() {
       </Head>
       <main
         style={roboto.style}
-        className="h-screen flex items-center justify-center"
+        className="h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-0"
       >
-        <section className="p-8 w-full max-w-md mx-auto rounded-lg shadow-lg shadow-gray-100  space-y-4">
+        <section className="p-8 w-full max-w-md mx-auto rounded-lg border border-gray-200 shadow-2xl shadow-gray-200 space-y-4">
           <h1 className="text-gray-400 font-bold text-2xl flex items-center space-x-3">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -38,40 +48,19 @@ export default function Home() {
             <span>Opening hours</span>
           </h1>
           <ul className="divide-y divide-slate-200 border-t border-t-gray-400 border-b border-b-gray-200 text-base">
-            <li className="py-4 flex items-center justify-between">
-              <span className="text-gray-400 font-medium">Monday</span>
-              <span className="text-gray-300 font-normal">Closed</span>
-            </li>
-            <li className="py-4 flex items-center justify-between">
-              <span className="text-gray-400 font-medium">Tuesday</span>
-              <span>10 AM - 6 PM</span>
-            </li>
-            <li className="py-4 flex items-center justify-between">
-              <span className="text-gray-400 font-medium">Wednesday</span>
-              <span className="text-gray-300 font-normal">Closed</span>
-            </li>
-            <li className="py-4 flex items-center justify-between">
-              <span className="text-gray-400 font-medium">Thursday</span>
-              <span className="text-gray-400 font-normal">10 AM - 6 PM</span>
-            </li>
-            <li className="py-4 flex items-center justify-between">
-              <span className="text-gray-400 font-medium flex items-center space-x-3">
-                <span>Friday</span>
-                <span className="text-green text-xs font-bold">TODAY</span>
-              </span>
-              <span className="text-gray-400 font-normal">10 AM - 1 AM</span>
-            </li>
-            <li className="py-4 flex items-center justify-between">
-              <span className="text-gray-400 font-medium">Saturday</span>
-              <span className="text-gray-400 font-normal">10 AM - 1 AM</span>
-            </li>
-            <li className="py-4 flex items-center justify-between">
-              <span className="text-gray-400 font-medium">Sunday</span>
-              <span className="text-gray-400 font-normal">12 PM - 9 PM</span>
-            </li>
+            <Schedule schedule={props.data} />
           </ul>
         </section>
       </main>
     </>
   );
 }
+
+export const getServerSideProps = async () => {
+  const response = await fetch("http://localhost:4000/api/opening-hours");
+  const { data, message } = (await response.json()) as FormattedResponseData;
+
+  return {
+    props: { statusCode: response.status, data, message },
+  };
+};
