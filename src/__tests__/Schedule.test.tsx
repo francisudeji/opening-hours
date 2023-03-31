@@ -52,4 +52,10 @@ describe("Schedule.tsx", () => {
       }
     });
   });
+
+  test("should show error message if empty json", async () => {
+    render(<Schedule schedule={{} as FormattedSchedule} />);
+    const errorMessage = screen.getByText(/No opening hours found/);
+    expect(errorMessage).toBeDefined();
+  });
 });
