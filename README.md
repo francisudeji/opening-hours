@@ -15,6 +15,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 yarn
 ```
 
+This should take a few minutes
+
 - Run the development server:
 
 ```bash
