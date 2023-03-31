@@ -53,4 +53,4 @@ This endpoint serves as an entry point for the data displayed in the UI. You'll 
 
 - The `public` directory is where static files are stored.
 
-- Every other file is mostly a config file
+- Every other file is mostly a config file.
