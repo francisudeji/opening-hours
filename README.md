@@ -6,7 +6,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## How to run
 
-- First unzip the file titled `francis-udeji-opening-hours.zip`
+- First unzip the file titled `opening-hours-main.zip`
 - Open it up with your favorite code editor
 - `cd` into the folder in your terminal
 - Install the dependencies yarn:
