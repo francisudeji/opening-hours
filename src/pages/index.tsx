@@ -1,9 +1,10 @@
 import Head from "next/head";
 import { Roboto } from "next/font/google";
 import { Schedule } from "src/components/Schedule";
-import { InferGetServerSidePropsType } from "next";
+import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { FormattedResponseData } from "src/utils";
 import Error from "src/pages/_error";
+import type { GetServerSideProps } from "next";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -56,8 +57,12 @@ export default function Home(
   );
 }
 
-export const getServerSideProps = async () => {
-  const response = await fetch("http://localhost:4000/api/opening-hours");
+export const getServerSideProps: GetServerSideProps = async (props) => {
+  const dev = process.env.NODE_ENV === "development";
+  const host = props?.req?.headers.host;
+  const baseUrl = dev ? `http://${host}` : `https://${host}`;
+
+  const response = await fetch(`${baseUrl}/api/opening-hours`);
   const { data, message } = (await response.json()) as FormattedResponseData;
 
   return {
